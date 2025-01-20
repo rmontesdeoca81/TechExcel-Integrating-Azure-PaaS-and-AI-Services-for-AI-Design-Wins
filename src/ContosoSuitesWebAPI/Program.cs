@@ -17,15 +17,30 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Use dependency injection to inject services into the application.
-builder.Services.AddSingleton<IDatabaseService, DatabaseService>();
 builder.Services.AddSingleton<IVectorizationService, VectorizationService>();
 builder.Services.AddSingleton<MaintenanceCopilot, MaintenanceCopilot>();
+
+// Create a single instance of the DatabaseService to be shared across the application.
+builder.Services.AddSingleton<IDatabaseService, DatabaseService>((_) => 
+{
+    var connectionString = builder.Configuration.GetConnectionString("ContosoSuites");
+    return new DatabaseService(connectionString!);
+});
+
 
 // Create a single instance of the CosmosClient to be shared across the application.
 builder.Services.AddSingleton<CosmosClient>((_) =>
 {
+
+    string userAssignedClientId = builder.Configuration["AZURE_CLIENT_ID"]!;
+    var credential = new DefaultAzureCredential(
+        new DefaultAzureCredentialOptions
+        {
+            ManagedIdentityClientId = userAssignedClientId
+        });
     CosmosClient client = new(
-        connectionString: builder.Configuration["CosmosDB:ConnectionString"]!
+        accountEndpoint: builder.Configuration["CosmosDB:AccountEndpoint"]!,
+        tokenCredential: credential
     );
     return client;
 });
