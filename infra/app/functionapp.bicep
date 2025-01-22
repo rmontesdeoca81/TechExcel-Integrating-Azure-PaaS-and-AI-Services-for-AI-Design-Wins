@@ -3,7 +3,7 @@ param appInsightsName string
 param storageAccountName string
 param tags object = {}
 param functionAppServicePlanName string
-param functionAppName string
+param fun string
 param managedIdentityName string
 param openAiProps object
 param cosmosDbEndpoint string
@@ -30,7 +30,7 @@ resource functionAppServicePlan 'Microsoft.Web/serverFarms@2022-09-01' = {
 }
 
 resource functionApp 'Microsoft.Web/sites@2022-03-01' = {
-  name: functionAppName
+  name: fun
   location: location
   kind: 'functionapp'
   tags: union(tags, { 'azd-service-name': vectorizerServiceName })

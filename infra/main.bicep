@@ -98,6 +98,7 @@ var appServicePlanName = '${abbrs.webServerFarms}${resourceToken}-cosu'
 var webAppNameApi = '${abbrs.webSitesAppService}${resourceToken}-api'
 var webAppNameDash = '${abbrs.webSitesAppService}${resourceToken}-dash'
 var functionAppName = '${abbrs.webSitesFunctions}${resourceToken}-cosu'
+//var functionAppName = '${resourceToken}-cosu'
 var functionAppServicePlanName = '${abbrs.webServerFarms}${resourceToken}-cosu-fn'
 var logAnalyticsName = '${abbrs.operationalInsightsWorkspaces}${resourceToken}-cosu'
 var appInsightsName = '${abbrs.insightsComponents}${resourceToken}-cosu'
@@ -195,7 +196,7 @@ module functionapp 'app/functionapp.bicep' = {
     tags: tags
     storageAccountName: storageAccountName
     appInsightsName: monitoring.outputs.appInsightsName
-    functionAppName: functionAppName
+    fun: functionAppName
     functionAppServicePlanName: functionAppServicePlanName
     openAiProps: {
       endpoint: ai.outputs.openAIEndpoint
